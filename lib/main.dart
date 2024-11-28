@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:untitled4/screens/auth/login_screen.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   runApp(const MainApp());
@@ -16,15 +22,16 @@ class MainApp extends StatelessWidget {
     FlutterNativeSplash.remove();
 
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Image.asset(
-            'assets/dogpal-logo.png',
-            width: 200,
-            height: 200,
-          ),
-        ),
+      theme: ThemeData(
+        primaryColor: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
       ),
+      home: AuthWrapper(),
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/signup': (context) => SignupScreen(),
+        '/home': (context) => HomeScreen(),
+      },
     );
   }
 }

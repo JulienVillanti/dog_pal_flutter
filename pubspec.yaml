@@ -10,12 +10,15 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_native_splash: ^2.4.2
+  firebase_core: any
+  firebase_auth: any
+  firebase_database: ^11.1.6
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
