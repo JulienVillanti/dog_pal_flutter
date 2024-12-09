@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled4/services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -60,10 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ? CircularProgressIndicator()
                         : ElevatedButton(
                             onPressed: _handleLogin,
-                            child: Text('Login'),
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(double.infinity, 50),
                             ),
+                            child: Text('Login'),
                           ),
                     SizedBox(height: 16),
                     TextButton(

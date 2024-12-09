@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Users/julien/development/flutter
-FLUTTER_APPLICATION_PATH=/Users/julien/Documents/Courses/420-C06-MT HYBRID MOBILE PROGRAMMING/untitled4
+FLUTTER_ROOT=C:\Users\villa\Programming\flutter
+FLUTTER_APPLICATION_PATH=C:\Users\villa\IdeaProjects\dog_pal_flutter
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=0.1.0
