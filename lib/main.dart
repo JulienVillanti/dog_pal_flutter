@@ -24,8 +24,8 @@ class MainApp extends StatelessWidget {
 
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.blue,
-        scaffoldBackgroundColor: Colors.grey,
+        primaryColor: Colors.red,
+        scaffoldBackgroundColor: Colors.white,
       ),
       home: AuthWrapper(),
       routes: {
