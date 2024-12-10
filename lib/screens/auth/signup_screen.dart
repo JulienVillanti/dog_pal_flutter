@@ -29,16 +29,29 @@ class _SignupScreenState extends State<SignupScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Image.asset(
-                  'assets/dogpal-logo.png',
+                  'assets/dogpal-red-logo.png',
                   width: 150,
                   height: 150,
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Name',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                        width: 1.5,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:BorderSide(
+                        color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                        width: 1.5,
+                      ),
+                    ),
                   ),
                   validator: (value) => value?.isEmpty ?? true
                       ? 'Please fill in the name field'
@@ -47,9 +60,22 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Email',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                        width: 1.5,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:BorderSide(
+                      color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                    width: 1.5,
+                      ),
+                    ),
                   ),
                   validator: (value) => value?.isEmpty ?? true
                       ? 'Please fill in the email field'
@@ -58,9 +84,22 @@ class _SignupScreenState extends State<SignupScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Password',
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                        width: 1.5,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide(
+                        color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                        width: 1.5,
+                      ),
+                    ),
                   ),
                   obscureText: true,
                   validator: (value) => value?.isEmpty ?? true
@@ -71,16 +110,27 @@ class _SignupScreenState extends State<SignupScreen> {
                 _isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
-                  onPressed: _handleSignup,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                  ),
-                  child: const Text('Sign-Up'),
-                ),
+                        onPressed: _handleSignup,
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(double.infinity, 50),
+                            backgroundColor: Color.fromRGBO(174, 83, 83, 0.5),
+                            overlayColor: Colors.red),
+                        child: const Text(
+                          'Sign-Up',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Already have an account? Login'),
+                  child: const Text(
+                    'Already have an account? Login',
+                    style: TextStyle(
+                      color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                    ),
+                  ),
                 ),
               ],
             ),

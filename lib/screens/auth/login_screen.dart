@@ -39,11 +39,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Email',
                         border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                              width: 2.0,
+                            )),
+                        focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide(
-                            color: Colors.red,
-                            width: 2.0,
-                          )
+                            color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                            width: 1.5,
+                          ),
                         ),
                       ),
                       validator: (value) => value?.isEmpty ?? true
@@ -56,6 +62,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: 'Password',
                         border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                            width: 1.5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide(
                             color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
@@ -86,10 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: 16),
                     TextButton(
                       onPressed: () => Navigator.pushNamed(context, '/signup'),
-                      child: Text('Don\'t have an account? Sign up',
-                      style: TextStyle(
+                      child: Text(
+                        'Don\'t have an account? Sign up',
+                        style: TextStyle(
                           color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
-                      ),
+                        ),
                       ),
                     ),
                   ],
