@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/logo-grayscale.png',
+                'assets/dogpal-red-logo.png',
                 width: 300,
                 height: 150,
               ),
