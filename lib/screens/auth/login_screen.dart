@@ -38,7 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                            width: 2.0,
+                          )
+                        ),
                       ),
                       validator: (value) => value?.isEmpty ?? true
                           ? 'Email field cannot be empty'
@@ -49,7 +55,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: 'Password',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                            width: 1.5,
+                          ),
+                        ),
                       ),
                       obscureText: true,
                       validator: (value) => value?.isEmpty ?? true
@@ -62,14 +74,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         : ElevatedButton(
                             onPressed: _handleLogin,
                             style: ElevatedButton.styleFrom(
-                              minimumSize: Size(double.infinity, 50),
+                                minimumSize: Size(double.infinity, 50),
+                                backgroundColor:
+                                    Color.fromRGBO(174, 83, 83, 0.5),
+                                overlayColor: Colors.red),
+                            child: Text(
+                              'Login',
+                              style: TextStyle(color: Colors.white),
                             ),
-                            child: Text('Login'),
                           ),
                     SizedBox(height: 16),
                     TextButton(
                       onPressed: () => Navigator.pushNamed(context, '/signup'),
-                      child: Text('Don\'t have an account? Sign up'),
+                      child: Text('Don\'t have an account? Sign up',
+                      style: TextStyle(
+                          color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                      ),
+                      ),
                     ),
                   ],
                 ),
