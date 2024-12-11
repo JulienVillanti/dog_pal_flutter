@@ -5,9 +5,18 @@ class HomeScreenView extends StatefulWidget {
 
   @override
   _HomeScreenViewState createState() => _HomeScreenViewState();
+
 }
 
 class _HomeScreenViewState extends State<HomeScreenView> {
+  //Change the position navigation bar
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String userEmail = '';
@@ -61,24 +70,34 @@ class _HomeScreenViewState extends State<HomeScreenView> {
         length: 4,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("DogPals"),
-            bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.home), text: "Home"),
-                Tab(icon: Icon(Icons.person), text: "Profile"),
-                Tab(icon: Icon(Icons.star), text: "Reviews"),
-                Tab(icon: Icon(Icons.map), text: "Parks"),
+            title: Text("DogPal App"),
+          ),
+            body: IndexedStack(
+              index: _selectedIndex,
+              children: [
+                homeTab(),
+                profileTab(),
+                reviewTab(),
+                parksTab(),
               ],
             ),
-          ),
-          body: TabBarView(
-            children: [
-              homeTab(),
-              profileTab(),
-              reviewTab(),
-              parksTab(),
-            ],
-          ),
+            bottomNavigationBar:BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              backgroundColor: Colors.grey[800],
+              selectedItemColor: Colors.black,
+              unselectedItemColor: Colors.pink,
+              items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem( icon: Icon(Icons.home), label: 'Home',
+              ),
+              BottomNavigationBarItem( icon: Icon(Icons.person), label: 'Profile',
+              ),
+              BottomNavigationBarItem( icon: Icon(Icons.star), label: 'Reviews',
+              ),
+              BottomNavigationBarItem( icon: Icon(Icons.nature_people), label: 'Maps',
+              ),
+              ],
+            ),
         ),
       ),
     );
@@ -89,24 +108,18 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       child: Column(
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,  // Alinha verticalmente no centro
-            crossAxisAlignment: CrossAxisAlignment.center, // Alinha horizontalmente no centro
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ColorFiltered(
-                colorFilter: ColorFilter.mode(Colors.brown, BlendMode.srcIn),
-                child: Image.asset(
-                  "assets/dogpal-logo.png",
-                  height: 200,
+                colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+                child: Image.asset("assets/dogpal-logo.png", height: 100,
                 ),
               )
             ],
           ),
-          CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.grey.shade300,
-            child: Icon(Icons.person, size: 50),
-          ),
-          Text("Hello, $userEmail", style: TextStyle(fontSize: 20)),
+          SizedBox(height: 40),
+          Text("Welcome, $userEmail", style: TextStyle(fontSize: 20)),
           Image.asset("assets/map.png", height: 250),
           Text("Best Parks in Montreal", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
@@ -136,7 +149,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                 MaterialPageRoute(builder: (context) => ParkDetailView(park: park)),
               );
             },
-            child: Text("View Park"),
+            child: Text("View Park",  style: TextStyle(color: Colors.pink),),
           ),
         ],
       ),
