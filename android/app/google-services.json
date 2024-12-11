@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "886345537525",
-    "project_id": "flutterdogpal",
-    "storage_bucket": "flutterdogpal.firebasestorage.app"
+    "project_number": "175173956405",
+    "project_id": "dogpalflutter",
+    "storage_bucket": "dogpalflutter.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:886345537525:android:0bef995b3c0dc2703532bc",
+        "mobilesdk_app_id": "1:175173956405:android:56d9521bd094896fbd127c",
         "android_client_info": {
-          "package_name": "dogpal.flutter"
+          "package_name": "com.example.untitled4"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCzwsg3I_fCjg6QEKqw0bom8kFIO6TBtYA"
+          "current_key": "AIzaSyDZbEuuD2FNZD2RLXPkAL2ycSeU3Wo1mvI"
         }
       ],
       "services": {
