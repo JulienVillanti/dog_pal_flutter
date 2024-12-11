@@ -1,0 +1,41 @@
+name: untitled4
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_native_splash: ^2.4.2
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  firebase_database: ^10.3.8
+  cloud_firestore: ^4.13.6
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/dogpal-logo.png
+    - assets/logo-grayscale.png
+
+flutter_native_splash:
+  color: "#934C4C"
+  image: assets/logo-grayscale.png
+  android: true
+  ios: true
+  web: true
+  android_12:
+    image: assets/logo-grayscale.png
+    color: "#934C4C"
+    branding_mode: bottom
+
