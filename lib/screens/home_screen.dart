@@ -165,7 +165,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
   Widget parksTab() {
-    return Center(child: Text("Parks Page"));
+    return Center(child: Text("Maps Page"));
   }
 }
 
