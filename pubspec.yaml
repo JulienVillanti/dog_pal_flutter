@@ -28,6 +28,10 @@ flutter:
     - assets/
     - assets/dogpal-logo.png
     - assets/logo-grayscale.png
+    - assets/parcangrignon.jpeg
+    - assets/parcjeandrapeau.jpeg
+    - assets/parclafontaine.jpeg
+    - assets/map.png
 
 flutter_native_splash:
   color: "#934C4C"
