@@ -12,9 +12,11 @@ class _MapScreenState extends State<MapScreen> {
   TextEditingController _searchController = TextEditingController();
   late GoogleMapController mapController;
   Set<Marker> _markers = {};
-  late LatLng _userLocation;
+  //Add location MONTREAL
+  late LatLng _userLocation = LatLng(45.5017, -73.5673);
 
   List<Park> parks = [
+
     Park(name: "Mount Royal Park", coordinate: LatLng(45.5017, -73.5673)),
     Park(name: "Jean-Drapeau Park", coordinate: LatLng(45.5088, -73.5530)),
     Park(name: "La Fontaine Park", coordinate: LatLng(45.5200, -73.6167)),
@@ -34,26 +36,30 @@ class _MapScreenState extends State<MapScreen> {
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
       _userLocation = LatLng(position.latitude, position.longitude);
-      // _addMarkers();
+
+      _addMarkers();
      _findClosestPark();
     });
   }
 
-  // void _addMarkers() {
-  //   for (var park in parks) {
-  //     _markers.add(
-  //       Marker(
-  //         markerId: MarkerId(park.name),
-  //         position: park.coordinate,
-  //         infoWindow: InfoWindow(title: park.name),
-  //       ),
-  //     );
-  //   }
-  // }
+  //Add markers-red
+  void _addMarkers() {
+    for (var park in parks) {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(park.name),
+          position: park.coordinate,
+          infoWindow: InfoWindow(title: park.name),
+        ),
+      );
+    }
+  }
 
   void _findClosestPark() {
+
     double minDistance = double.infinity;
     Park? closest = parks.first;
+
     for (var park in parks) {
       double distance = _calculateDistance(_userLocation, park.coordinate);
       if (distance < minDistance) {
