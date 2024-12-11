@@ -27,13 +27,8 @@ android {
         applicationId = "com.example.untitled4"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-<<<<<<< HEAD
         minSdk = 21
         targetSdk = flutter.targetSdkVersion
-=======
-        minSdk = 23
-        targetSdk = 33
->>>>>>> b51b1e4 (Finally works for me)
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -50,37 +45,21 @@ android {
 flutter {
     source = "../.."
 }
-<<<<<<< HEAD
 
 dependencies {
 
     // Import the Firebase BoM
-
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
-
-
 
 
     // When using the BoM, don't specify versions in Firebase dependencies
 
     // https://firebase.google.com/docs/android/setup#available-libraries
-
-}
-
-=======
-dependencies {
-    // Add any required Firebase dependencies here
     implementation platform('com.google.firebase:firebase-bom:32.0.0') // Firebase BOM
-    implementation 'com.google.firebase:firebase-analytics' // Example Firebase dependency
-    // Add other Firebase services as needed
-<<<<<<< HEAD
-}
->>>>>>> b51b1e4 (Finally works for me)
-=======
-
+    implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.android.gms:play-services-maps:18.1.0' //Google Maps
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'// Example Firebase dependency
 }
 
 apply plugin: 'com.google.gms.google-services'
->>>>>>> a592f7c (Some problems with api maps)
+

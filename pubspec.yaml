@@ -10,26 +10,15 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_native_splash: ^2.4.2
-<<<<<<< HEAD
-
   firebase_core: ^2.24.2
   firebase_auth: ^4.15.3
   firebase_database: ^10.3.8
   cloud_firestore: ^4.13.6
-=======
-  firebase_core: any
-  firebase_auth: any
-  firebase_database: any
-<<<<<<< HEAD
-  google_maps_flutter: ^2.1.1
   geolocator: ^9.0.2
->>>>>>> 206cfb1 (Create map screen + plugging)
-=======
   google_maps_flutter: ^2.3.0
-  geolocator: ^10.0.1
   google_geocoding: ^0.2.0
-  permission_handler: ^10.5.0
->>>>>>> a592f7c (Some problems with api maps)
+#  permission_handler: ^10.5.0
+
 
 
 dev_dependencies:
