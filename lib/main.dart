@@ -5,23 +5,15 @@ import 'package:untitled4/screens/auth/login_screen.dart';
 import 'package:untitled4/screens/auth/signup_screen.dart';
 import 'package:untitled4/screens/auth/home_wrapper.dart';
 import 'package:untitled4/screens/home_screen.dart';
-<<<<<<< HEAD
 
-=======
->>>>>>> b51b1e4 (Finally works for me)
-// import 'firebase_options.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-<<<<<<< HEAD
 
   await Firebase.initializeApp(
     // options: DefaultFirebaseOptions.currentPlatform,
   );
 
-=======
-  await Firebase.initializeApp();
->>>>>>> b51b1e4 (Finally works for me)
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   runApp(const MainApp());

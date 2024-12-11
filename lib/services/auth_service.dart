@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-<<<<<<< HEAD
 import 'database_service.dart';
-=======
 import 'package:firebase_database/firebase_database.dart';
 import 'package:untitled4/services/database_service.dart';
->>>>>>> e168c7e ( change the version in pubspec.yaml + create database service)
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
