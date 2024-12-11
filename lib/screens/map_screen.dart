@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_geocoding/google_geocoding.dart';
+
 
 class MapScreen extends StatefulWidget {
   @override
@@ -14,6 +16,7 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> _markers = {};
   //Add location MONTREAL
   late LatLng _userLocation = LatLng(45.5017, -73.5673);
+  bool _isLoading = true;
 
   List<Park> parks = [
 
@@ -35,9 +38,11 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _getUserLocation() async {
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
+
       _userLocation = LatLng(position.latitude, position.longitude);
 
       _addMarkers();
+
      _findClosestPark();
     });
   }
@@ -83,18 +88,48 @@ class _MapScreenState extends State<MapScreen> {
     return distance;
   }
 
+  //Try Install API
+  Future<void> _geocodeAddress(String address) async {
+
+    const apiKey = "YOUR_API_KEY";
+
+    final geocoding = GoogleGeocoding(apiKey);
+
+    // var result = await geocoding.geocoding.get(address);
+    //
+    // if (result != null &&
+    //     result.results != null &&
+    //     result.results!.isNotEmpty) {
+    //   var location = result.results!.first.geometry!.location!;
+    //   LatLng coordinate = LatLng(location.lat!, location.lng!);
+    //
+    //   setState(() {
+    //     _userLocation = coordinate;
+    //     mapController.animateCamera(CameraUpdate.newLatLngZoom(coordinate, 14));
+    //     _findClosestPark();
+    //   });
+    // } else {
+    //   print("Adress not found.");
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Parks Near You"),
-      ),
+      appBar: AppBar(),
       body: Column(
         children: [
           // Logo
-          Image.asset(
-            "assets/dogpal-logo.png",
-            height: 150,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+                child: Image.asset("assets/dogpal-logo.png", height: 100,
+                ),
+              )
+            ],
           ),
           // User type
           Padding(

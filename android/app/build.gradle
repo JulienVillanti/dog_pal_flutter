@@ -73,5 +73,14 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.0.0') // Firebase BOM
     implementation 'com.google.firebase:firebase-analytics' // Example Firebase dependency
     // Add other Firebase services as needed
+<<<<<<< HEAD
 }
 >>>>>>> b51b1e4 (Finally works for me)
+=======
+
+    implementation 'com.google.android.gms:play-services-maps:18.1.0' //Google Maps
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+}
+
+apply plugin: 'com.google.gms.google-services'
+>>>>>>> a592f7c (Some problems with api maps)

@@ -20,9 +20,16 @@ dependencies:
   firebase_core: any
   firebase_auth: any
   firebase_database: any
+<<<<<<< HEAD
   google_maps_flutter: ^2.1.1
   geolocator: ^9.0.2
 >>>>>>> 206cfb1 (Create map screen + plugging)
+=======
+  google_maps_flutter: ^2.3.0
+  geolocator: ^10.0.1
+  google_geocoding: ^0.2.0
+  permission_handler: ^10.5.0
+>>>>>>> a592f7c (Some problems with api maps)
 
 
 dev_dependencies:
