@@ -14,13 +14,13 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> _markers = {};
   late LatLng _userLocation;
 
-  // List<Park> parks = [
-  //   Park(name: "Mount Royal Park", coordinate: LatLng(45.5017, -73.5673)),
-  //   Park(name: "Jean-Drapeau Park", coordinate: LatLng(45.5088, -73.5530)),
-  //   Park(name: "La Fontaine Park", coordinate: LatLng(45.5200, -73.6167)),
-  //
-  //
-  // ];
+  List<Park> parks = [
+    Park(name: "Mount Royal Park", coordinate: LatLng(45.5017, -73.5673)),
+    Park(name: "Jean-Drapeau Park", coordinate: LatLng(45.5088, -73.5530)),
+    Park(name: "La Fontaine Park", coordinate: LatLng(45.5200, -73.6167)),
+
+
+  ];
   Park? closestPark;
 
   @override
@@ -35,7 +35,7 @@ class _MapScreenState extends State<MapScreen> {
     setState(() {
       _userLocation = LatLng(position.latitude, position.longitude);
       // _addMarkers();
-      // _findClosestPark();
+     _findClosestPark();
     });
   }
 
@@ -51,22 +51,22 @@ class _MapScreenState extends State<MapScreen> {
   //   }
   // }
 
-  // void _findClosestPark() {
-  //   double minDistance = double.infinity;
-  //   Park? closest = parks.first;
-  //   for (var park in parks) {
-  //     double distance = _calculateDistance(_userLocation, park.coordinate);
-  //     if (distance < minDistance) {
-  //       minDistance = distance;
-  //       closest = park;
-  //     }
-  //   }
-  //   setState(() {
-  //     closestPark = closest;
-  //   });
-  // }
+  void _findClosestPark() {
+    double minDistance = double.infinity;
+    Park? closest = parks.first;
+    for (var park in parks) {
+      double distance = _calculateDistance(_userLocation, park.coordinate);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closest = park;
+      }
+    }
+    setState(() {
+      closestPark = closest;
+    });
+  }
 
-  
+
   double _calculateDistance(LatLng userLocation, LatLng parkLocation) {
     double distance = Geolocator.distanceBetween(
       userLocation.latitude,
@@ -90,7 +90,7 @@ class _MapScreenState extends State<MapScreen> {
             "assets/dogpal-logo.png",
             height: 150,
           ),
-          // Campo de busca
+          // User type
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
