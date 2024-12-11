@@ -5,6 +5,8 @@ import 'package:untitled4/screens/auth/login_screen.dart';
 import 'package:untitled4/screens/auth/signup_screen.dart';
 import 'package:untitled4/screens/auth/home_wrapper.dart';
 import 'package:untitled4/screens/home_screen.dart';
+import 'package:untitled4/screens/map_screen.dart';
+// import 'firebase_options.dart';
 
 
 void main() async {
@@ -36,6 +38,7 @@ class MainApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupScreen(),
         '/home': (context) => HomeScreenView(),
+        '/map': (context) => MapScreen(),
       },
     );
   }

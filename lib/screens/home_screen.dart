@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'map_screen.dart';
 
 class HomeScreenView extends StatefulWidget {
 
@@ -11,6 +12,7 @@ class HomeScreenView extends StatefulWidget {
 class _HomeScreenViewState extends State<HomeScreenView> {
   //Change the position navigation bar
   int _selectedIndex = 0;
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -78,7 +80,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                 homeTab(),
                 profileTab(),
                 reviewTab(),
-                parksTab(),
+                mapTab(),
               ],
             ),
             bottomNavigationBar:BottomNavigationBar(
@@ -164,24 +166,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     return Center(child: Text("Review Page"));
   }
 
-  Widget parksTab() {
-    return Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text("Maps Page"),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              // Navega para a página de mapa
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => parksTab()),
-              );
-            },
-            child: Text("Open Map"),
-          ),
-        ],
-      ),
-    );
+  Widget mapTab() {
+    return MapScreen();
   }
 }
 
