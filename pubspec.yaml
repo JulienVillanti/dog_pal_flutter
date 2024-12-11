@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.5.3
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
   flutter_native_splash: ^2.4.2
   firebase_core: any
   firebase_auth: any
-  firebase_database: ^11.1.6
+  firebase_database: any
 
 
 dev_dependencies:

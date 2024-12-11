@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:untitled4/screens/auth/login_screen.dart';
-import 'firebase_options.dart';
+// import 'firebase_options.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    // options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -26,11 +26,11 @@ class MainApp extends StatelessWidget {
         primaryColor: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: AuthWrapper(),
+      // home: AuthWrapper(),
       routes: {
         '/login': (context) => LoginScreen(),
-        '/signup': (context) => SignupScreen(),
-        '/home': (context) => HomeScreen(),
+        // '/signup': (context) => SignupScreen(),
+        // '/home': (context) => HomeScreen(),
       },
     );
   }

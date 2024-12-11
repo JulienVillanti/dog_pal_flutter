@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:untitled4/services/database_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final DatabaseService _databaseService = DatabaseService();
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
