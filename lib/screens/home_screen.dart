@@ -165,7 +165,23 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
   Widget parksTab() {
-    return Center(child: Text("Maps Page"));
+    return Center(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text("Maps Page"),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Navega para a página de mapa
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => parksTab()),
+              );
+            },
+            child: Text("Open Map"),
+          ),
+        ],
+      ),
+    );
   }
 }
 
