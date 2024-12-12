@@ -122,16 +122,6 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
-  double _calculateDistance(LatLng userLocation, LatLng parkLocation) {
-    double distance = Geolocator.distanceBetween(
-      userLocation.latitude,
-      userLocation.longitude,
-      parkLocation.latitude,
-      parkLocation.longitude,
-    );
-    return distance;
-  }
-
 //Create function for get Current Location = User
   Future<void> _getUserLocation() async {
     try {
@@ -284,17 +274,6 @@ class _MapScreenState extends State<MapScreen> {
     if (data['routes'].isEmpty) {
       print("Error: Cannot get directions");
       return;
-    }
-
-    final route = data['routes'][0]['legs'][0];
-    // final duration = route['duration']['text'];
-
-
-    List<LatLng> polylineCoordinates = [];
-    for (var step in route['steps']) {
-      double lat = step['end_location']['lat'];
-      double lng = step['end_location']['lng'];
-      polylineCoordinates.add(LatLng(lat, lng));
     }
   }
 
