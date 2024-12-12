@@ -70,55 +70,6 @@ class _MapScreenState extends State<MapScreen> {
     _getUserLocation();
   }
 
-//Create function for get Current Location = User
-  Future<void> _getUserLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition();
-      setState(() {
-        _userLocation = LatLng(position.latitude, position.longitude);
-        _addMarkers();
-        _findClosestPark();
-        _isLoading = false;
-      });
-    } catch (e) {
-      print("Error getting user location: $e");
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  //Create a new function for show the distance by walking
-  Future<void> _getWalkingDuration(LatLng userLocation, LatLng parkLocation) async {
-    const apiKey = googleMapsApiKey;
-
-    final url = Uri.parse(
-      'https://maps.googleapis.com/maps/api/directions/json?origin=${userLocation.latitude},${userLocation.longitude}&destination=${parkLocation.latitude},${parkLocation.longitude}&mode=walking&key=$apiKey',
-    );
-
-    final response = await http.get(url);
-
-    if (response.statusCode != 200) {
-      print("Error getting directions: ${response.statusCode}");
-      return;
-    }
-
-    final data = jsonDecode(response.body);
-
-    if (data['routes'].isEmpty) {
-      print("Error: Cannot get directions");
-      return;
-    }
-
-    final route = data['routes'][0]['legs'][0];
-    final duration = route['duration']['text'];
-
-    setState(() {
-      _walkingDuration = duration;
-    });
-  }
-
-
   //Add markers-red
   void _addMarkers() {
     setState(() {
@@ -143,19 +94,25 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+
   void _findClosestPark() {
 
     double minDistance = double.infinity;
     Park? closest = parks.first;
 
     for (var park in parks) {
-      double distance = _calculateDistance(_userLocation, park.coordinate);
+      double distance =  Geolocator.distanceBetween(
+          _userLocation.latitude,
+          _userLocation.longitude,
+          park.coordinate.latitude,
+          park.coordinate.longitude,
+    );
       if (distance < minDistance) {
         minDistance = distance;
         closest = park;
       }
     }
-    //Calculate the distance user + park
+   // Calculate the distance user + park
     if (closest != null) {
       _getWalkingDuration(_userLocation, closest.coordinate);
       _addRouteToMap(_userLocation, closest.coordinate);
@@ -164,7 +121,6 @@ class _MapScreenState extends State<MapScreen> {
       closestPark = closest;
     });
   }
-
 
   double _calculateDistance(LatLng userLocation, LatLng parkLocation) {
     double distance = Geolocator.distanceBetween(
@@ -176,7 +132,103 @@ class _MapScreenState extends State<MapScreen> {
     return distance;
   }
 
-  //Try Install API
+//Create function for get Current Location = User
+  Future<void> _getUserLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      setState(() {
+        _userLocation = LatLng(position.latitude, position.longitude);
+        _addMarkers();
+        _findClosestPark();
+        _isLoading = false;
+      });
+    } catch (e) {
+      print("Error getting user location: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  //Create a new function for show the distance by walking
+  Future<void> _getWalkingDuration(LatLng userLocation, LatLng parkLocation) async {
+    try {
+    const apiKey = googleMapsApiKey;
+
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/directions/json?origin=${userLocation.latitude},${userLocation.longitude}&destination=${parkLocation.latitude},${parkLocation.longitude}&mode=walking&key=$apiKey',
+    );
+
+    final response = await http.get(url);
+
+    if (response.statusCode != 200) {
+      print("Error getting directions: ${response.statusCode}");
+      return;
+    }
+
+    final data = jsonDecode(response.body);
+
+    if (data['routes'].isEmpty) {
+      print("Error: Cannot get directions");
+      return;
+    }
+
+    final route = data['routes'][0]['legs'][0];
+    final duration = route['duration']['text'];
+
+    List<LatLng> polylineCoordinates = _decodePolyline(data['routes'][0]['overview_polyline']['points']);
+    _addRouteToMapWithPolyline(polylineCoordinates);
+
+    setState(() {
+      _walkingDuration = duration;
+    });
+    } catch (e) {
+      print("Error getting walking duration: $e");
+    }
+  }
+  //I take these 100% from chat GPT, I tried finding one simple way
+  //but I didn't find'
+  List<LatLng> _decodePolyline(String polyline) {
+
+    var list = polyline.codeUnits;
+    var coordinates = <LatLng>[];
+
+    int index = 0;
+    int len = polyline.length;
+    int lat = 0;
+    int lng = 0;
+
+    while (index < len) {
+      int shift = 0;
+      int result = 0;
+      int byte;
+      do {
+        byte = list[index] - 63;
+        result |= (byte & 0x1f) << shift;
+        shift += 5;
+        index++;
+      } while (byte >= 0x20);
+      int dLat = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lat += dLat;
+
+      shift = 0;
+      result = 0;
+      do {
+        byte = list[index] - 63;
+        result |= (byte & 0x1f) << shift;
+        shift += 5;
+        index++;
+      } while (byte >= 0x20);
+      int dLng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lng += dLng;
+
+      coordinates.add(LatLng(lat / 1E5, lng / 1E5));
+    }
+
+    return coordinates;
+  }
+
+  //Install API
   Future<void> _geocodeAddress(String address) async {
     try {
       const apiKey = googleMapsApiKey;
@@ -184,8 +236,6 @@ class _MapScreenState extends State<MapScreen> {
       final url = Uri.parse(
         'https://maps.googleapis.com/maps/api/geocode/json?address=${Uri.encodeComponent(address)}&region=ca&key=$apiKey',
       );
-
-
       final response = await http.get(url);
 
       if (response.statusCode != 200) {
@@ -215,7 +265,6 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   //Add the route for user = line red
-  //Adicione o parâmetro color como Colors.orange
   void _addRouteToMap(LatLng userLocation, LatLng parkLocation) async {
     const apiKey = googleMapsApiKey;
 
@@ -238,44 +287,31 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     final route = data['routes'][0]['legs'][0];
-    final duration = route['duration']['text'];
+    // final duration = route['duration']['text'];
 
-    // Para desenhar a rota
+
     List<LatLng> polylineCoordinates = [];
     for (var step in route['steps']) {
       double lat = step['end_location']['lat'];
       double lng = step['end_location']['lng'];
       polylineCoordinates.add(LatLng(lat, lng));
     }
-
-    setState(() {
-      _polylines.clear();  // Limpa polylines existentes
-
-      _polylines.add(Polyline(
-        polylineId: PolylineId("route"),
-        color: Colors.orange,  // Cor laranja para o trajeto
-        width: 5,
-        points: [userLocation, parkLocation],  // Pontos que formam a linha
-      ));
-    });
   }
 
   Set<Polyline> _polylines = {};
 
-  void _addPolyline(LatLng start, LatLng end) {
+  void _addRouteToMapWithPolyline(List<LatLng> polylineCoordinates) {
     setState(() {
-      _polylines.add(
-        Polyline(
-          polylineId: PolylineId("route"),
-          visible: true,
-          points: [start, end],
-          color: Colors.orange,  // Troque para laranja
-          width: 5,
-        ),
-      );
+      _polylines.clear();
+
+      _polylines.add(Polyline(
+        polylineId: PolylineId("route"),
+        color: Colors.orange,
+        width: 5,
+        points: polylineCoordinates,
+      ));
     });
   }
-
 
 
   @override
