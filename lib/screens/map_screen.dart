@@ -6,7 +6,6 @@ import 'config.dart';
 import 'dart:convert';
 
 
-
 class MapScreen extends StatefulWidget {
   @override
   _MapScreenState createState() => _MapScreenState();
