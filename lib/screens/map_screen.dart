@@ -3,6 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'config.dart';
+import 'dart:convert';
+
 
 
 class MapScreen extends StatefulWidget {
@@ -133,60 +135,41 @@ class _MapScreenState extends State<MapScreen> {
 
   //Try Install API
   Future<void> _geocodeAddress(String address) async {
-    // try {
-    //   const apiKey = googleMapsApiKey;
-    //
-    //   final url = Uri.parse(
-    //     'https://maps.googleapis.com/maps/api/geocode/json?address=${Uri.encodeComponent(address)}&key=$apiKey',
-    //   );
-    //
-    //   print("URL gerada: $url");
-    //
-    //   final response = await http.get(url);
-    //
-    //   print("Status Code: ${response.statusCode}");
-    //   print("Corpo da resposta: ${response.body}");
-    //
-    //   // Verifica se a resposta foi bem-sucedida
-    //   if (response.statusCode != 200) {
-    //     print("Erro: Código ${response.statusCode}");
-    //     return;
-    //   }
-    //
-    //   // Valida o tipo do corpo da resposta
-    //   if (response.body.isEmpty) {
-    //     print("Erro: Resposta vazia.");
-    //     return;
-    //   }
-    //
-    //   // Tenta decodificar o JSON
-    //   late final data;
-    //   try {
-    //     data = jsonDecode(response.body);
-    //   } catch (e) {
-    //     print("Erro ao decodificar JSON: $e");
-    //     return;
-    //   }
-    //
-    //   // Valida o conteúdo decodificado
-    //   if (data['results'] == null || data['results'].isEmpty) {
-    //     print("Erro: Nenhum resultado encontrado no JSON.");
-    //     return;
-    //   }
-    //
-    //   final location = data['results'][0]['geometry']['location'];
-    //   LatLng coordinate = LatLng(location['lat'], location['lng']);
-    //
-    //   setState(() {
-    //     _userLocation = coordinate;
-    //     mapController.animateCamera(CameraUpdate.newLatLngZoom(coordinate, 14));
-    //     _findClosestPark();
-    //   });
-    //
-    // } catch (e) {
-    //   print("Erro geral: $e");
-    // }
+    try {
+      const apiKey = googleMapsApiKey; // Sua chave da API do Google Maps
+
+      final url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/geocode/json?address=${Uri.encodeComponent(address)}&key=$apiKey',
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode != 200) {
+        print("Erro: Código ${response.statusCode}");
+        return;
+      }
+
+      final data = jsonDecode(response.body);
+
+      if (data['results'] == null || data['results'].isEmpty) {
+        print("Erro: Nenhum resultado encontrado.");
+        return;
+      }
+
+      final location = data['results'][0]['geometry']['location'];
+      LatLng coordinate = LatLng(location['lat'], location['lng']);
+
+      setState(() {
+        _userLocation = coordinate;
+        mapController.animateCamera(CameraUpdate.newLatLngZoom(coordinate, 14));
+        _findClosestPark(); // Recalcular o parque mais próximo após encontrar as coordenadas
+      });
+
+    } catch (e) {
+      print("Erro ao geocodificar o endereço: $e");
+    }
   }
+
 
 
   @override
