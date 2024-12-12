@@ -20,6 +20,9 @@ class _MapScreenState extends State<MapScreen> {
   late LatLng _userLocation = LatLng(45.5017, -73.5673);
   bool _isLoading = true;
 
+  //Variable for walking distance
+  String _walkingDuration = '';
+
   List<Park> parks = [
 
     Park(name: "Mount Royal Park", coordinate: LatLng(45.5017, -73.5673)),
@@ -62,7 +65,7 @@ class _MapScreenState extends State<MapScreen> {
     _getUserLocation();
   }
 
-
+//Create function for get Current Location = User
   Future<void> _getUserLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition();
@@ -79,6 +82,37 @@ class _MapScreenState extends State<MapScreen> {
       });
     }
   }
+
+  //Create a new function for show the distance by walking
+  Future<void> _getWalkingDuration(LatLng userLocation, LatLng parkLocation) async {
+    const apiKey = googleMapsApiKey;
+
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/directions/json?origin=${userLocation.latitude},${userLocation.longitude}&destination=${parkLocation.latitude},${parkLocation.longitude}&mode=walking&key=$apiKey',
+    );
+
+    final response = await http.get(url);
+
+    if (response.statusCode != 200) {
+      print("Error getting directions: ${response.statusCode}");
+      return;
+    }
+
+    final data = jsonDecode(response.body);
+
+    if (data['routes'].isEmpty) {
+      print("Error: Cannot get directions");
+      return;
+    }
+
+    final route = data['routes'][0]['legs'][0];
+    final duration = route['duration']['text'];
+
+    setState(() {
+      _walkingDuration = duration;
+    });
+  }
+
 
   //Add markers-red
   void _addMarkers() {
@@ -116,6 +150,10 @@ class _MapScreenState extends State<MapScreen> {
         closest = park;
       }
     }
+    //Calculate the distance user + park
+    if (closest != null) {
+      _getWalkingDuration(_userLocation, closest.coordinate);
+    }
     setState(() {
       closestPark = closest;
     });
@@ -135,7 +173,7 @@ class _MapScreenState extends State<MapScreen> {
   //Try Install API
   Future<void> _geocodeAddress(String address) async {
     try {
-      const apiKey = googleMapsApiKey; // Sua chave da API do Google Maps
+      const apiKey = googleMapsApiKey;
 
       final url = Uri.parse(
         'https://maps.googleapis.com/maps/api/geocode/json?address=${Uri.encodeComponent(address)}&key=$apiKey',
@@ -144,14 +182,14 @@ class _MapScreenState extends State<MapScreen> {
       final response = await http.get(url);
 
       if (response.statusCode != 200) {
-        print("Erro: Código ${response.statusCode}");
+        print("Error: ${response.statusCode}");
         return;
       }
 
       final data = jsonDecode(response.body);
 
       if (data['results'] == null || data['results'].isEmpty) {
-        print("Erro: Nenhum resultado encontrado.");
+        print("Error: cannot found any results");
         return;
       }
 
@@ -161,14 +199,13 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         _userLocation = coordinate;
         mapController.animateCamera(CameraUpdate.newLatLngZoom(coordinate, 14));
-        _findClosestPark(); // Recalcular o parque mais próximo após encontrar as coordenadas
+        _findClosestPark();
       });
 
     } catch (e) {
-      print("Erro ao geocodificar o endereço: $e");
+      print("Error geocoding the address: $e");
     }
   }
-
 
 
   @override
@@ -222,9 +259,20 @@ class _MapScreenState extends State<MapScreen> {
           if (closestPark != null)
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "The nearest park is: ${closestPark!.name}",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "The nearest park is: ${closestPark!.name}",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green,
+                    ),
+                  ),
+                  if (_walkingDuration.isNotEmpty)
+                    Text(
+                      "Walking duration: $_walkingDuration",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.pink),
+                    ),
+                ],
               ),
             ),
 
