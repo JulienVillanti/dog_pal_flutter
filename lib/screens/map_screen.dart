@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:untitled4/screens/review_screen.dart';
 import 'config.dart';
 import 'dart:convert';
 
@@ -22,6 +23,8 @@ class _MapScreenState extends State<MapScreen> {
 
   //Variable for walking distance
   String _walkingDuration = '';
+  String review = "Sample Park Review";
+
 
   List<Park> parks = [
 
@@ -364,6 +367,10 @@ class _MapScreenState extends State<MapScreen> {
 
           ElevatedButton(
             onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ReviewScreen(review: review)),
+              );
 
             },
             child: Text("Review Parks"),
