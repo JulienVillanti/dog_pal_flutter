@@ -72,11 +72,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide:BorderSide(
-                      color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
-                    width: 1.5,
+                        color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                        width: 1.5,
 
-                      
-  
                       ),
                     ),
                   ),
@@ -126,6 +124,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
 
+
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
@@ -171,6 +170,6 @@ class _SignupScreenState extends State<SignupScreen> {
     _passwordController.dispose();
     super.dispose();
   }
-
 }
+
 
