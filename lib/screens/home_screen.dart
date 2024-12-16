@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'map_screen.dart';
+import 'user_profile_page.dart';
 
 class HomeScreenView extends StatefulWidget {
 
@@ -159,7 +160,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
   Widget profileTab() {
-    return Center(child: Text("Profile Page"));
+    return UserProfilePage();
   }
 
   Widget reviewTab() {

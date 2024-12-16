@@ -141,4 +141,59 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
     );
   }
+  void _showSignOutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Sign Out"),
+        content: Text("Are you sure you want to sign out?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              signOutFirebase();
+            },
+            child: Text("Sign Out"),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
+class DetailRow extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color color;
+
+  const DetailRow({
+    Key? key,
+    required this.title,
+    required this.value,
+    required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Text(
+            "$title:",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          Spacer(),
+          Text(value),
+        ],
+      ),
+    );
+  }
+}
