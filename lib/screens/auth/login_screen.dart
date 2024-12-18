@@ -24,11 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/dogpal-red-logo.png',
-                width: 300,
-                height: 150,
-              ),
+          ColorFiltered(
+          colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+          child: Image.asset("assets/dogpal-logo.png", height: 100,
+          ),
+          ),
               SizedBox(height: 30),
               Form(
                 key: _formKey,
@@ -41,13 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
-                              color: Colors.red,
+                              color: Colors.pink,
                               width: 2.0,
                             )),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide: BorderSide(
-                            color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                            color: Colors.pink,
                             width: 1.5,
                           ),
                         ),
@@ -86,11 +86,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ? CircularProgressIndicator()
                         : ElevatedButton(
                             onPressed: _handleLogin,
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: Size(double.infinity, 50),
-                                backgroundColor:
-                                    Color.fromRGBO(174, 83, 83, 0.5),
-                                overlayColor: Colors.red),
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 50),
+                          backgroundColor: Colors.pink,
+                          overlayColor: Colors.red),
                             child: Text(
                               'Login',
                               style: TextStyle(color: Colors.white),
@@ -102,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'Don\'t have an account? Sign up',
                         style: TextStyle(
-                          color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                          color: Colors.pink,
                         ),
                       ),
                     ),
@@ -124,6 +123,9 @@ class _LoginScreenState extends State<LoginScreen> {
           _emailController.text,
           _passwordController.text,
         );
+
+        Navigator.pushReplacementNamed(context, '/home');
+
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error.toString())),
