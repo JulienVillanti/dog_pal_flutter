@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:untitled4/screens/review_screen.dart';
 import 'map_screen.dart';
 import 'user_profile_page.dart';
 
@@ -164,7 +165,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   }
 
   Widget reviewTab() {
-    return Center(child: Text("Review Page"));
+    return ReviewScreen();
   }
 
   Widget mapTab() {

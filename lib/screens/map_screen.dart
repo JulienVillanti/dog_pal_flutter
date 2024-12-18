@@ -364,11 +364,14 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
 
+          // Adjusted for presentation, need to change later
           ElevatedButton(
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ReviewScreen(review: review)),
+                MaterialPageRoute(
+                  builder: (context) => ReviewScreen(), // Sem passar parâmetros
+                ),
               );
             },
             child: Text("Review Parks"),
