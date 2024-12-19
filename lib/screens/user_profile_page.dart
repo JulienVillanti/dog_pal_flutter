@@ -69,12 +69,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
-            // Logo
-            Image.asset(
-              'assets/images/DogPalLogo2.png',
-              width: 250,
-              height: 100,
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+              child: Image.asset("assets/dogpal-logo.png", height: 100,
+              ),
             ),
             SizedBox(height: 20),
             // User Image

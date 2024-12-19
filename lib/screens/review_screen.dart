@@ -52,12 +52,9 @@ class ReviewScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Image.asset(
-                'assets/images/DogPalLogo2.png',
-                height: 150,
-                fit: BoxFit.contain,
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+              child: Image.asset("assets/dogpal-logo.png", height: 100,
               ),
             ),
             const Padding(
