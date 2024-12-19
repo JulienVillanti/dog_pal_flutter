@@ -75,3 +75,102 @@ class ReviewScreen extends StatelessWidget {
     );
   }
 
+  Widget buildParkReview(ParkReviewData park) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            park.name,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            "Rating: ${park.rating.toStringAsFixed(1)}",
+            style: const TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 10),
+          ...park.reviews.map((review) => buildReviewCard(review)).toList(),
+          const Divider(height: 20, thickness: 1),
+        ],
+      ),
+    );
+  }
+
+  Widget buildReviewCard(ParkReview review) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                review.userName,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: List.generate(
+                  5,
+                      (index) => Icon(
+                    Icons.star,
+                    color: index < review.rating ? Colors.yellow : Colors.grey,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Text(
+            review.comment,
+            style: const TextStyle(fontSize: 14, color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ParkReviewData {
+  final String name;
+  final double rating;
+  final String imageName;
+  final String description;
+  final List<ParkReview> reviews;
+
+  ParkReviewData({
+    required this.name,
+    required this.rating,
+    required this.imageName,
+    required this.description,
+    required this.reviews,
+  });
+}
+
+class ParkReview {
+  final String userName;
+  final int rating;
+  final String comment;
+
+  ParkReview({
+    required this.userName,
+    required this.rating,
+    required this.comment,
+  });
+}
