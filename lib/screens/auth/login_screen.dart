@@ -24,10 +24,10 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/dogpal-red-logo.png',
-                width: 300,
-                height: 150,
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+                child: Image.asset("assets/dogpal-logo.png", height: 100,
+                ),
               ),
               SizedBox(height: 30),
               Form(
