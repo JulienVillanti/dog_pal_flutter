@@ -28,10 +28,10 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Image.asset(
-                  'assets/dogpal-red-logo.png',
-                  width: 150,
-                  height: 150,
+                ColorFiltered(
+                  colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+                  child: Image.asset("assets/dogpal-logo.png", height: 100,
+                  ),
                 ),
                 const SizedBox(height: 32),
                 TextFormField(
@@ -41,7 +41,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                       borderSide: BorderSide(
-                        color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                        color: Colors.pink,
                         width: 1.5,
                       ),
                     ),
@@ -114,7 +114,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         onPressed: _handleSignup,
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 50),
-                            backgroundColor: Color.fromRGBO(174, 83, 83, 0.5),
+                            backgroundColor: Colors.pink,
                             overlayColor: Colors.red),
                         child: const Text(
                           'Sign-Up',
@@ -131,7 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: const Text(
                     'Already have an account? Login',
                     style: TextStyle(
-                      color: Color.fromARGB(0xFF, 0xAE, 0X53, 0x53),
+                      color: Colors.pink,
                     ),
                   ),
                 ),
