@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:untitled4/screens/auth/login_screen.dart';
+import 'package:untitled4/screens/auth/profile_creation_screen.dart';
 import 'package:untitled4/screens/auth/signup_screen.dart';
 import 'package:untitled4/screens/auth/home_wrapper.dart';
 import 'package:untitled4/screens/home_screen.dart';
@@ -39,6 +40,7 @@ class MainApp extends StatelessWidget {
         '/signup': (context) => SignupScreen(),
         '/home': (context) => HomeScreenView(),
         '/map': (context) => MapScreen(),
+        '/profile_creation': (context) => UserProfileCreationView(),
       },
     );
   }

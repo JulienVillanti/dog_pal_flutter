@@ -37,28 +37,27 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
     });
 
     try {
-      final uid = FirebaseAuth.instance.currentUser?.uid;
-      if (uid == null) throw Exception("User not logged in");
+      // Atualizar os dados no Firebase ou fazer o que for necessário para submeter os dados
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userRef = FirebaseDatabase.instance.ref().child('users/${user.uid}');
+        await userRef.update({
+          'name': _userNameController.text,
+          'email': _userEmailController.text,
+          'age': _userAgeController.text,
+          'dogName': _dogNameController.text,
+          'dogBreed': _dogBreedController.text,
+          'profileCreated': true,
+        });
+      }
 
-      final userRef = FirebaseDatabase.instance.ref().child('users').child(uid);
-
-      final userData = {
-        "profileCreated": true,
-        "userName": _userNameController.text,
-        "userEmail": _userEmailController.text,
-        "userAge": _userAgeController.text,
-        "dogName": _dogNameController.text,
-        "dogBreed": _dogBreedController.text,
-        "userImage": _userImage != null ? _userImage!.path : null,
-      };
-
-      await userRef.update(userData);
-      Navigator.pushReplacementNamed(context, '/homeScreen');
-    } catch (e) {
-      print("Failed to update profile status: $e");
+      // Após a atualização bem-sucedida, navegue para a Home
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erro ao atualizar perfil: $error")));
     } finally {
       setState(() {
-        _isSubmitting = false;
+        _isSubmitting = false; // Desabilitar o estado de carregamento
       });
     }
   }
@@ -74,13 +73,12 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Logo
-            Image.asset(
-              'assets/DogPalLogo2.png',
-              height: 150,
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+              child: Image.asset("assets/dogpal-logo.png", height: 100,
+              ),
             ),
-
-            SizedBox(height: 16.0),
+            SizedBox(height: 30),
 
             // Input fields
             TextField(
@@ -108,26 +106,6 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
 
             SizedBox(height: 16.0),
 
-            // Image picker
-            Text("Insert a picture of yourself! (optional)"),
-            SizedBox(height: 8.0),
-            _userImage != null
-                ? CircleAvatar(
-              radius: 50,
-              backgroundImage: FileImage(_userImage!),
-            )
-                : TextButton.icon(
-              onPressed: _pickImage,
-              icon: Icon(Icons.camera_alt, color: Colors.brown),
-              label: Text(
-                'Select a Photo',
-                style: TextStyle(color: Colors.brown),
-              ),
-            ),
-
-            SizedBox(height: 16.0),
-
-            // Submit button
             ElevatedButton(
               onPressed: _isSubmitting
                   ? null
@@ -142,7 +120,7 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
                   ? CircularProgressIndicator(color: Colors.white)
                   : Text('Submit your Info'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.brown,
+                backgroundColor: Colors.pink[100],
                 padding: EdgeInsets.symmetric(vertical: 16.0),
               ),
             ),
