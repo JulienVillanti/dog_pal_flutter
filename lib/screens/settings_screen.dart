@@ -14,7 +14,6 @@ class _SettingsViewState extends State<SettingsView> {
   final DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   String userName = "";
-  String userEmail = "";
   String userAge = "";
   String dogName = "";
   String dogBreed = "";
@@ -29,6 +28,11 @@ class _SettingsViewState extends State<SettingsView> {
   void initState() {
     super.initState();
     loadUserProfile();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     isDarkMode = Theme.of(context).brightness == Brightness.dark;
   }
 
@@ -39,7 +43,6 @@ class _SettingsViewState extends State<SettingsView> {
       final data = snapshot.snapshot.value as Map<dynamic, dynamic>;
       setState(() {
         userName = data['name'] ?? "";
-        userEmail = data['email'] ?? "";
         userAge = data['age']?.toString() ?? "";
         dogName = data['dogName'] ?? "";
         dogBreed = data['dogBreed'] ?? "";
@@ -53,7 +56,6 @@ class _SettingsViewState extends State<SettingsView> {
     if (user != null) {
       await ref.child('dogOwners/${user.uid}').set({
         'name': userName,
-        'email': userEmail,
         'age': int.tryParse(userAge) ?? 0,
         'dogName': dogName,
         'dogBreed': dogBreed,
@@ -110,14 +112,12 @@ class _SettingsViewState extends State<SettingsView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Image.asset(
-                  'assets/DogPalLogo2.png',
-                  width: 350,
-                  height: 150,
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+                child: Image.asset("assets/dogpal-logo.png", height: 100,
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 20),
               GestureDetector(
                 onTap: pickImage,
                 child: CircleAvatar(
@@ -135,11 +135,6 @@ class _SettingsViewState extends State<SettingsView> {
                 decoration: InputDecoration(labelText: 'Name'),
                 onChanged: (value) => userName = value,
                 controller: TextEditingController(text: userName),
-              ),
-              TextField(
-                decoration: InputDecoration(labelText: 'Email'),
-                onChanged: (value) => userEmail = value,
-                controller: TextEditingController(text: userEmail),
               ),
               TextField(
                 decoration: InputDecoration(labelText: 'Age'),
