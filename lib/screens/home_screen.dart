@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:untitled4/screens/review_screen.dart';
 import 'map_screen.dart';
 import 'user_profile_page.dart';
+import 'settings_screen.dart';
 
 class HomeScreenView extends StatefulWidget {
 
@@ -71,7 +72,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
-        length: 4,
+        length: 5,
         child: Scaffold(
           appBar: AppBar(
             title: Text("DogPal App"),
@@ -83,6 +84,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
                 profileTab(),
                 reviewTab(),
                 mapTab(),
+                settingsTab(),
               ],
             ),
             bottomNavigationBar:BottomNavigationBar(
@@ -99,6 +101,8 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               BottomNavigationBarItem( icon: Icon(Icons.star), label: 'Reviews',
               ),
               BottomNavigationBarItem( icon: Icon(Icons.nature_people), label: 'Maps',
+              ),
+              BottomNavigationBarItem( icon: Icon(Icons.settings), label: 'Settings',
               ),
               ],
             ),
@@ -170,6 +174,10 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
   Widget mapTab() {
     return MapScreen();
+  }
+
+  Widget settingsTab() {
+    return SettingsView();
   }
 }
 
