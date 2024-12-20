@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../main.dart';
+
 class SettingsView extends StatefulWidget {
   @override
   _SettingsViewState createState() => _SettingsViewState();
@@ -19,7 +21,6 @@ class _SettingsViewState extends State<SettingsView> {
   String dogBreed = "";
   bool profileCreated = true;
 
-  XFile? userImage;
   bool notificationsEnabled = true;
   bool locationEnabled = true;
   bool isDarkMode = false;
@@ -39,7 +40,7 @@ class _SettingsViewState extends State<SettingsView> {
   Future<void> loadUserProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final snapshot = await ref.child('dogOwners/${user.uid}').once();
+      final snapshot = await ref.child('users/${user.uid}').once();
       final data = snapshot.snapshot.value as Map<dynamic, dynamic>;
       setState(() {
         userName = data['name'] ?? "";
@@ -54,7 +55,7 @@ class _SettingsViewState extends State<SettingsView> {
   Future<void> saveProfileData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await ref.child('dogOwners/${user.uid}').set({
+      await ref.child('users/${user.uid}').update({
         'name': userName,
         'age': int.tryParse(userAge) ?? 0,
         'dogName': dogName,
@@ -71,21 +72,11 @@ class _SettingsViewState extends State<SettingsView> {
     }
   }
 
-  Future<void> pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        userImage = image;
-      });
-    }
-  }
-
   void toggleDarkMode(bool value) {
     setState(() {
       isDarkMode = value;
     });
-    // Implementar lógica para persistir o tema se necessário
+    themeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
   }
 
   void handleNotificationsToggle(bool value) {
@@ -119,15 +110,9 @@ class _SettingsViewState extends State<SettingsView> {
               ),
               SizedBox(height: 20),
               GestureDetector(
-                onTap: pickImage,
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: userImage != null
-                      ? FileImage(File(userImage!.path))
-                      : null,
-                  child: userImage == null
-                      ? Icon(Icons.person, size: 50, color: Colors.grey)
-                      : null,
+                  child: Icon(Icons.person, size: 50, color: Colors.grey)
                 ),
               ),
               SizedBox(height: 16),

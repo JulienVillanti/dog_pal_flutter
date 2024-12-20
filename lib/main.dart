@@ -23,27 +23,38 @@ void main() async {
   runApp(const MainApp());
 }
 
+//notifier to implement dark mode (change theme)
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
 
-    return MaterialApp(
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (context, ThemeMode currentMode, _) {
+      return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.red,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: AuthWrapper(),
-      routes: {
+        darkTheme: ThemeData.dark(),
+        themeMode: currentMode,
+         home: AuthWrapper(),
+         routes: {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignupScreen(),
         '/home': (context) => HomeScreenView(),
         '/map': (context) => MapScreen(),
         '/profile_creation': (context) => UserProfileCreationView(),
         '/settings_screen': (context) => SettingsView()
-      },
-    );
+             },
+          );
+        },
+      );
+    }
   }
-}
