@@ -27,7 +27,7 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
       // Atualizar os dados no Firebase ou fazer o que for necessário para submeter os dados
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        final userRef = FirebaseDatabase.instance.ref().child('dogOwners/${user.uid}');
+        final userRef = FirebaseDatabase.instance.ref().child('users/${user.uid}');
         await userRef.update({
           'name': _userNameController.text,
           'email': _userEmailController.text,

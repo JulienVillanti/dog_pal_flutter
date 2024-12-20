@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,10 +30,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
       final user = _auth.currentUser;
 
       if (user != null) {
-        final userDoc = await _firestore.collection('dogOwners').doc(user.uid).get();
+        final userRef = FirebaseDatabase.instance.ref().child('users/${user.uid}');
+        final snapshot = await userRef.get();
 
-        if (userDoc.exists) {
-          final data = userDoc.data()!;
+        if (snapshot.exists) {
+          final data = snapshot.value as Map<dynamic, dynamic>;
           setState(() {
             userName = data['name'] ?? "Unknown User";
             userEmail = data['email'] ?? "No Email";
