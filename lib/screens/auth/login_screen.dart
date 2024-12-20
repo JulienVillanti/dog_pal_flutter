@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled4/services/auth_service.dart';
 
@@ -24,11 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-          ColorFiltered(
-          colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
-          child: Image.asset("assets/dogpal-logo.png", height: 100,
-          ),
-          ),
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+                child: Image.asset("assets/dogpal-logo.png", height: 100,
+                ),
+              ),
               SizedBox(height: 30),
               Form(
                 key: _formKey,
@@ -52,7 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      validator: (value) => value?.isEmpty ?? true
+                      validator: (value) =>
+                      value?.isEmpty ?? true
                           ? 'Email field cannot be empty'
                           : null,
                     ),
@@ -77,7 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       obscureText: true,
-                      validator: (value) => value?.isEmpty ?? true
+                      validator: (value) =>
+                      value?.isEmpty ?? true
                           ? 'Password field cannot be empty'
                           : null,
                     ),
@@ -85,16 +89,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     _isLoading
                         ? CircularProgressIndicator()
                         : ElevatedButton(
-                            onPressed: _handleLogin,
+                      onPressed: _handleLogin,
                       style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 50),
                           backgroundColor: Colors.pink,
                           overlayColor: Colors.red),
-                            child: Text(
-                              'Login',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
+                      child: Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                     SizedBox(height: 16),
                     TextButton(
                       onPressed: () => Navigator.pushNamed(context, '/signup'),
@@ -115,31 +119,71 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> _handleLogin() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      setState(() => _isLoading = true);
-      try {
-        await _authService.signInWithEmailPassword(
-          _emailController.text,
-          _passwordController.text,
-        );
+  //Show to Julien later the changes on his page!!
 
-        Navigator.pushReplacementNamed(context, '/home');
+  // Future<void> _handleLogin() async {
+  //   if (_formKey.currentState?.validate() ?? false) {
+  //     setState(() => _isLoading = true);
+  //     try {
+  //       await _authService.signInWithEmailPassword(
+  //         _emailController.text,
+  //         _passwordController.text,
+  //       );
+  //
+  //       Navigator.pushReplacementNamed(context, '/home');
 
-      } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.toString())),
-        );
-      } finally {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+      Future<void> _handleLogin() async {
+          if (_formKey.currentState?.validate() ?? false) {
+            setState(() => _isLoading = true);
+
+            try {
+              // Fazer login com email e senha
+              final UserCredential? userCredential = await _authService
+                  .signInWithEmailPassword(
+                _emailController.text,
+                _passwordController.text,
+              );
+
+              // Obter ID do usuário logado
+              final userId = userCredential?.user?.uid;
+
+              if (userId != null) {
+                // Referência ao Firebase Database
+                final userRef = FirebaseDatabase.instance
+                    .ref()
+                    .child('users')
+                    .child(userId);
+
+                // Verificar o status do perfil
+                final snapshot = await userRef.once();
+                final userData = snapshot.snapshot.value as Map?;
+                final profileCreated = userData?['profileCreated'] ?? false;
+
+                if (profileCreated) {
+                  // Redirecionar para HomeScreen
+                  Navigator.pushReplacementNamed(context, '/home');
+                } else {
+                  // Redirecionar para ProfileCreationScreen
+                  Navigator.pushReplacementNamed(context, '/profile_creation');
+                }
+              } else {
+                throw Exception("User ID is null.");
+              }
+            } catch (error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(error.toString())),
+              );
+            } finally {
+              setState(() => _isLoading = false);
+            }
+          }
+        }
+
+        @override
+        void dispose() {
+          _emailController.dispose();
+          _passwordController.dispose();
+          super.dispose();
   }
 }

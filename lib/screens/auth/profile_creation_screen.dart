@@ -108,7 +108,44 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
 
             SizedBox(height: 16.0),
 
+            // Image picker
+            Text("Insert a picture of yourself! (optional)"),
+            SizedBox(height: 8.0),
+            _userImage != null
+                ? CircleAvatar(
+              radius: 50,
+              backgroundImage: FileImage(_userImage!),
+            )
+                : TextButton.icon(
+              onPressed: _pickImage,
+              icon: Icon(Icons.camera_alt, color: Colors.brown),
+              label: Text(
+                'Select a Photo',
+                style: TextStyle(color: Colors.brown),
+              ),
+            ),
 
+            SizedBox(height: 16.0),
+
+            // Submit button
+            ElevatedButton(
+              onPressed: _isSubmitting
+                  ? null
+                  : (_userNameController.text.isEmpty ||
+                  _userEmailController.text.isEmpty ||
+                  _userAgeController.text.isEmpty ||
+                  _dogNameController.text.isEmpty ||
+                  _dogBreedController.text.isEmpty)
+                  ? null
+                  : _updateUserProfileStatus,
+              child: _isSubmitting
+                  ? CircularProgressIndicator(color: Colors.white)
+                  : Text('Submit your Info'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.brown,
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+              ),
+            ),
           ],
         ),
       ),
