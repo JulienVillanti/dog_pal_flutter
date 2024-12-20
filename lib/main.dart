@@ -7,6 +7,7 @@ import 'package:untitled4/screens/auth/signup_screen.dart';
 import 'package:untitled4/screens/auth/home_wrapper.dart';
 import 'package:untitled4/screens/home_screen.dart';
 import 'package:untitled4/screens/map_screen.dart';
+import 'package:untitled4/screens/settings_screen.dart';
 // import 'firebase_options.dart';
 
 
@@ -41,6 +42,7 @@ class MainApp extends StatelessWidget {
         '/home': (context) => HomeScreenView(),
         '/map': (context) => MapScreen(),
         '/profile_creation': (context) => UserProfileCreationView(),
+        '/settings_screen': (context) => SettingsView()
       },
     );
   }

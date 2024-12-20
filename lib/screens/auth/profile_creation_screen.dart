@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class UserProfileCreationView extends StatefulWidget {
@@ -16,20 +15,8 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
   final TextEditingController _dogNameController = TextEditingController();
   final TextEditingController _dogBreedController = TextEditingController();
 
-  File? _userImage;
-
-  final ImagePicker _picker = ImagePicker();
 
   bool _isSubmitting = false;
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _userImage = File(pickedFile.path);
-      });
-    }
-  }
 
   Future<void> _updateUserProfileStatus() async {
     setState(() {
@@ -40,7 +27,7 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
       // Atualizar os dados no Firebase ou fazer o que for necessário para submeter os dados
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        final userRef = FirebaseDatabase.instance.ref().child('users/${user.uid}');
+        final userRef = FirebaseDatabase.instance.ref().child('dogOwners/${user.uid}');
         await userRef.update({
           'name': _userNameController.text,
           'email': _userEmailController.text,

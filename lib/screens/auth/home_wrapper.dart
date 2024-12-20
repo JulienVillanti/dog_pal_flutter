@@ -21,7 +21,8 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.hasData) {
           return LoginScreen();
         }
-        return  HomeScreenView();
+        //Should be HomeScreen() but it is not working properly.
+        return  LoginScreen();
       },
     );
   }

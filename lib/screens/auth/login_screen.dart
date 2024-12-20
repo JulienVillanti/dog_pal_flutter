@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 final userData = snapshot.snapshot.value as Map?;
                 final profileCreated = userData?['profileCreated'] ?? false;
 
-                if (profileCreated) {
+                if (profileCreated != false) {
                   // Redirecionar para HomeScreen
                   Navigator.pushReplacementNamed(context, '/home');
                 } else {

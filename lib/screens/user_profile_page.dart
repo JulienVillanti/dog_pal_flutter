@@ -16,7 +16,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String userEmail = "No Email";
   String dogName = "No Dog Name";
   String dogBreed = "No Breed";
-  String? userImageURL;
   bool navigateToLogin = false;
 
   @override
@@ -30,7 +29,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       final user = _auth.currentUser;
 
       if (user != null) {
-        final userDoc = await _firestore.collection('users').doc(user.uid).get();
+        final userDoc = await _firestore.collection('dogOwners').doc(user.uid).get();
 
         if (userDoc.exists) {
           final data = userDoc.data()!;
@@ -40,7 +39,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
             userAge = (data['age'] ?? 0).toString();
             dogName = data['dogName'] ?? "No Dog Name";
             dogBreed = data['dogBreed'] ?? "No Breed";
-            userImageURL = data['userImage']; // URL da imagem do Firebase Storage
           });
         }
       }
@@ -78,11 +76,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
             // User Image
             CircleAvatar(
               radius: 60,
-              backgroundImage:
-              userImageURL != null ? NetworkImage(userImageURL!) : null,
-              child: userImageURL == null
-                  ? Icon(Icons.person, size: 80, color: Colors.grey)
-                  : null,
+              child: Icon(Icons.person, size: 80, color: Colors.grey),
+              backgroundColor: Colors.grey[200],
             ),
             SizedBox(height: 10),
             // User Name
