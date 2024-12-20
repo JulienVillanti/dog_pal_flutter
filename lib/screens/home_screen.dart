@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:untitled4/screens/review_screen.dart';
@@ -56,15 +57,19 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     fetchUserName();
   }
 
-  void fetchUserName() {
-    final user = _auth.currentUser;
+  Future<void> fetchUserName() async {
+    final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      setState(() {
-        userEmail = user.email ?? "Unknown User";
-        userName = user.displayName ?? userEmail;
-      });
-    } else {
-      print("User not logged in");
+      final snapshot = await FirebaseDatabase.instance.ref('users/${user.uid}')
+          .get();
+      if (snapshot.exists && snapshot.value != null) {
+        setState(() {
+          userName = (snapshot.value as Map)['name'] ?? "Unknown User";
+          userEmail = user.email ?? "Unknown User";
+        });
+      } else {
+        print("User not logged in");
+      }
     }
   }
 
@@ -127,7 +132,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             ],
           ),
           SizedBox(height: 40),
-          Text("Welcome, $userEmail", style: TextStyle(fontSize: 20)),
+          Text("Welcome, $userName", style: TextStyle(fontSize: 20)),
           Image.asset("assets/map.png", height: 250),
           Text("Best Parks in Montreal", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
