@@ -17,6 +17,17 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
 
 
   bool _isSubmitting = false;
+  bool _isButtonEnabled = false;
+
+  void _validateFields() {
+    setState(() {
+      _isButtonEnabled = _userNameController.text.isNotEmpty &&
+          _userEmailController.text.isNotEmpty &&
+          _userAgeController.text.isNotEmpty &&
+          _dogNameController.text.isNotEmpty &&
+          _dogBreedController.text.isNotEmpty;
+    });
+  }
 
   Future<void> _updateUserProfileStatus() async {
     setState(() {
@@ -47,6 +58,29 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
         _isSubmitting = false; // Desabilitar o estado de carregamento
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Add listeners to validate fields on input change
+    _userNameController.addListener(_validateFields);
+    _userEmailController.addListener(_validateFields);
+    _userAgeController.addListener(_validateFields);
+    _dogNameController.addListener(_validateFields);
+    _dogBreedController.addListener(_validateFields);
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers to free resources
+    _userNameController.dispose();
+    _userEmailController.dispose();
+    _userAgeController.dispose();
+    _dogNameController.dispose();
+    _dogBreedController.dispose();
+    super.dispose();
   }
 
   @override
@@ -94,20 +128,14 @@ class _UserProfileCreationViewState extends State<UserProfileCreationView> {
             SizedBox(height: 16.0),
 
             ElevatedButton(
-              onPressed: _isSubmitting
-                  ? null
-                  : (_userNameController.text.isEmpty ||
-                  _userEmailController.text.isEmpty ||
-                  _userAgeController.text.isEmpty ||
-                  _dogNameController.text.isEmpty ||
-                  _dogBreedController.text.isEmpty)
+              onPressed: _isSubmitting || !_isButtonEnabled
                   ? null
                   : _updateUserProfileStatus,
               child: _isSubmitting
                   ? CircularProgressIndicator(color: Colors.white)
                   : Text('Submit your Info'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink[100],
+                backgroundColor:  _isButtonEnabled ? Colors.pink[100] : Colors.grey,
                 padding: EdgeInsets.symmetric(vertical: 16.0),
               ),
             ),
