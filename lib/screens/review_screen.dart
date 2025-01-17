@@ -75,8 +75,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }
   }
 
-//---------------------------------------------
-
   void _fetchParksReviews() {
     _ref.child("comments").once().then((DatabaseEvent event) {
       final snapshot = event.snapshot;
@@ -110,6 +108,28 @@ class _ReviewScreenState extends State<ReviewScreen> {
         }
 
         //------------------------------------------
+
+        List<ParkReviewData> parks = parksDict.entries.map((entry) {
+          String parkName = entry.key;
+          List<ParkReview> reviews = entry.value;
+          double avgRating = (parkRatings[parkName]?.reduce((a, b) => a + b) ?? 0) / reviews.length;
+
+          return ParkReviewData(name: parkName, rating: avgRating, reviews: reviews);
+        }).toList();
+
+        setState(() {
+          _parks = parks;
+        });
+      } else {
+        print("No comments data found.");
+      }
+    }).catchError((error) {
+      print("Error fetching parks reviews: $error");
+    });
+  }
+
+
+  //------------------------------------------
 
         @override
   Widget build(BuildContext context) {
