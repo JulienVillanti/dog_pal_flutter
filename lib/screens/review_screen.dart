@@ -140,30 +140,21 @@ class ReviewScreen extends StatelessWidget {
   }
 }
 
-class ParkReviewData {
+
+//------------------------------------------------------------
+  class ParkReviewData {
   final String name;
   final double rating;
-  final String imageName;
-  final String description;
   final List<ParkReview> reviews;
 
-  ParkReviewData({
-    required this.name,
-    required this.rating,
-    required this.imageName,
-    required this.description,
-    required this.reviews,
-  });
-}
+  ParkReviewData({required this.name, required this.rating, required this.reviews});
+  }
 
+//----------------------------------------------------------------
 class ParkReview {
   final String userName;
   final int rating;
   final String comment;
 
-  ParkReview({
-    required this.userName,
-    required this.rating,
-    required this.comment,
-  });
+  ParkReview({required this.userName, required this.rating, required this.comment});
 }
