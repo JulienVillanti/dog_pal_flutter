@@ -6,8 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'review_screen.dart';
 import 'auth/login_screen.dart';
 import '../main.dart';
-import 'package:provider/provider.dart';
-import 'notificationsManager/notificationsProvider.dart';
 
 class SettingsView extends StatefulWidget {
   @override
@@ -93,6 +91,21 @@ class _SettingsViewState extends State<SettingsView> {
     setState(() {
       locationEnabled = value;
     });
+  }
+
+  //Log Out method that utilizes notifications method on itself.
+  Future<void> _handleLogout() async {
+    if (notificationsEnabled) {
+      // Exibe o diálogo apenas se as notificações estiverem ativadas
+      await _showLogoutConfirmationDialog();
+    } else {
+      // Realiza o logout diretamente sem o diálogo
+      await _auth.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
   }
 
   // Método para confirmar o logout
@@ -206,7 +219,7 @@ class _SettingsViewState extends State<SettingsView> {
                     child: Text('Reset Password'),
                   ),
                   ElevatedButton(
-                    onPressed: _showLogoutConfirmationDialog,  // Chama o método para confirmar o logout
+                    onPressed: _handleLogout,  // Chama o método para confirmar o logout
                     child: Text('Sign Out'),
                   ),
                 ],
@@ -214,24 +227,6 @@ class _SettingsViewState extends State<SettingsView> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-
-//Manages the toggle notifications for the pages that use it.
-class SettingsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Settings')),
-      body: SwitchListTile(
-        title: Text('Enable Notifications'),
-        value: Provider.of<NotificationsProvider>(context).notificationsEnabled,
-        onChanged: (value) {
-          Provider.of<NotificationsProvider>(context, listen: false).toggleNotifications(value);
-        },
       ),
     );
   }

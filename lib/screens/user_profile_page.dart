@@ -1,7 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'review_screen.dart';
 import 'auth/login_screen.dart';
 
@@ -61,45 +60,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
   }
 
-  // Método para confirmar o logout
-  Future<void> _showLogoutConfirmationDialog() async {
-    if (notificationsEnabled) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Would you like to leave a comment on a park?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // Navegar para a tela de revisão
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ReviewScreen()),
-                );
-              },
-              child: Text('Yes'),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-                // Fazer o logoff
-                await _auth.signOut();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
-                );// Fecha a tela de configurações
-              },
-              child: Text('No'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,22 +111,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   DetailRow(title: "Dog Name", value: dogName, color: Colors.purple),
                   DetailRow(title: "Dog Breed", value: dogBreed, color: Colors.orange),
                 ],
-              ),
-            ),
-            SizedBox(height: 20),
-            // Logout Button
-            ElevatedButton(
-              onPressed: () => _showLogoutConfirmationDialog(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                elevation: 5,
-              ),
-              child: Text(
-                "Sign Out",
-                style: TextStyle(color: Colors.black),
               ),
             ),
           ],
