@@ -128,6 +128,41 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
   }
 
+  //------------------------------------------
+
+  void _saveComment() {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      final userId = user.uid;
+      final commentsRef = FirebaseDatabase.instance.ref("comments/$userId").push();
+
+      final commentData = {
+        "userName": _userName, // Certifique-se de que `_userName` foi atualizado
+        "selectedPark": _selectedParkIndex,
+        "rating": _rating,
+        "commentText": _commentText,
+      };
+
+      commentsRef.set(commentData).then((_) {
+        print("Comment saved successfully!");
+
+        // Recarregar dados após salvar o comentário
+        _fetchParksReviews(); // Atualizar lista de comentários
+        fetchUserDetails();   // Atualizar dados do usuário, se necessário
+
+        setState(() {
+          _commentText = ""; // Limpa o campo de texto
+          _rating = 0;       // Reseta a avaliação
+          _selectedParkIndex = 0; // Reseta o dropdown
+        });
+      }).catchError((error) {
+        print("Failed to save comment: $error");
+      });
+    } else {
+      print("No user is signed in.");
+    }
+  }
 
   //------------------------------------------
 
