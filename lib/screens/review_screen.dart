@@ -91,32 +91,25 @@ class _ReviewScreenState extends State<ReviewScreen> {
         if (parksData != null) {
           parksData.forEach((userId, comments) {
             print("User ID: $userId");
+
+            // Lida com listas de comentários
             if (comments is List) {
               for (var commentData in comments) {
-                if (commentData is Map) {
-                  print("Comment data: $commentData");
-
-                  int? parkIndex = commentData["selectedPark"] as int?;
-
-                  if (parkIndex != null && parkIndex < parkNames.length) {
-                    String parkName = parkNames[parkIndex];
-                    String userName = commentData["userName"] as String? ?? "Anonymous";
-                    int rating = commentData["rating"] as int? ?? 0;
-                    String comment = commentData["commentText"] as String? ?? "";
-
-                    ParkReview review = ParkReview(userName: userName, rating: rating, comment: comment);
-                    parksDict.putIfAbsent(parkName, () => []).add(review);
-                    parkRatings.putIfAbsent(parkName, () => []).add(rating);
-                  }
-                }
+                _processComment(commentData, parksDict, parkRatings);
               }
+            }
+
+            // Lida com mapas de comentários
+            if (comments is Map) {
+              comments.forEach((_, commentData) {
+                _processComment(commentData, parksDict, parkRatings);
+              });
             }
           });
         }
 
         print("Processed parksDict: $parksDict");
 
-        // Now, process the parksDict and calculate average ratings
         List<ParkReviewData> parks = parksDict.entries.map((entry) {
           String parkName = entry.key;
           List<ParkReview> reviews = entry.value;
@@ -136,6 +129,30 @@ class _ReviewScreenState extends State<ReviewScreen> {
     }).catchError((error) {
       print("Error fetching parks reviews: $error");
     });
+  }
+
+  void _processComment(
+      dynamic commentData,
+      Map<String, List<ParkReview>> parksDict,
+      Map<String, List<int>> parkRatings,
+      ) {
+    if (commentData is Map) {
+      int? parkIndex = commentData["selectedPark"] as int?;
+      if (parkIndex != null && parkIndex < parkNames.length) {
+        String parkName = parkNames[parkIndex];
+        String userName = commentData["userName"] as String? ?? "Anonymous";
+        int rating = commentData["rating"] as int? ?? 0;
+        String comment = commentData["commentText"] as String? ?? "";
+
+        ParkReview review = ParkReview(
+          userName: userName,
+          rating: rating,
+          comment: comment,
+        );
+        parksDict.putIfAbsent(parkName, () => []).add(review);
+        parkRatings.putIfAbsent(parkName, () => []).add(rating);
+      }
+    }
   }
 
   void _saveComment() async {
