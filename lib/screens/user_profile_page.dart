@@ -2,6 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'review_screen.dart';
+
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -56,6 +58,40 @@ class _UserProfilePageState extends State<UserProfilePage> {
     } catch (e) {
       print("Error signing out: $e");
     }
+  }
+
+  // Método para confirmar o logout
+  Future<void> _showLogoutConfirmationDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Would you like to leave a comment on a park?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navegar para a tela de revisão
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReviewScreen()),
+                );
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                // Fazer o logoff
+                await _auth.signOut();
+                Navigator.of(context).pop();  // Fecha a tela de configurações
+              },
+              child: Text('No'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -114,7 +150,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(height: 20),
             // Logout Button
             ElevatedButton(
-              onPressed: () => _showSignOutDialog(context),
+              onPressed: () => _showLogoutConfirmationDialog(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
