@@ -38,6 +38,47 @@ class _ReviewScreenState extends State<ReviewScreen> {
 //---------------------------------------------
 
   @override
+  void initState() {
+    super.initState();
+    fetchUserDetails();
+    _fetchParksReviews();
+  }
+
+  void fetchUserDetails() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      final userId = user.uid;
+      final userRef = FirebaseDatabase.instance.ref("users/$userId");
+
+      print("Fetching details for user ID: $userId");
+
+      try {
+        final event = await userRef.once();
+        final snapshot = event.snapshot;
+
+        if (snapshot.exists) {
+          print("Snapshot data: ${snapshot.value}");
+
+          final userData = Map<String, dynamic>.from(snapshot.value as Map);
+
+          setState(() {
+            _userName = userData["name"] ?? "Unknown User";
+            _dogBreed = userData["dogBreed"] ?? "No Breed";
+          });
+        } else {
+          print("No user data found at path users/$userId.");
+        }
+      } catch (error) {
+        print("Error fetching user details: $error");
+      }
+    } else {
+      print("No user is currently signed in.");
+    }
+  }
+
+//---------------------------------------------
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
