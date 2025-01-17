@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'review_screen.dart';
 import 'auth/login_screen.dart';
 import '../main.dart';
+import 'package:provider/provider.dart';
+import 'notificationsManager/notificationsProvider.dart';
 
 class SettingsView extends StatefulWidget {
   @override
@@ -31,6 +33,7 @@ class _SettingsViewState extends State<SettingsView> {
     super.initState();
     loadUserProfile();
   }
+
 
   @override
   void didChangeDependencies() {
@@ -211,6 +214,24 @@ class _SettingsViewState extends State<SettingsView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+
+//Manages the toggle notifications for the pages that use it.
+class SettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Settings')),
+      body: SwitchListTile(
+        title: Text('Enable Notifications'),
+        value: Provider.of<NotificationsProvider>(context).notificationsEnabled,
+        onChanged: (value) {
+          Provider.of<NotificationsProvider>(context, listen: false).toggleNotifications(value);
+        },
       ),
     );
   }
