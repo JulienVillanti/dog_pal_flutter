@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'review_screen.dart';
+import 'auth/login_screen.dart';
 
 
 class UserProfilePage extends StatefulWidget {
@@ -12,7 +13,6 @@ class UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<UserProfilePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String userName = "Unknown User";
   String userAge = "0";
@@ -20,6 +20,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String dogName = "No Dog Name";
   String dogBreed = "No Breed";
   bool navigateToLogin = false;
+
 
   @override
   void initState() {
@@ -62,6 +63,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   // Método para confirmar o logout
   Future<void> _showLogoutConfirmationDialog() async {
+    if (notificationsEnabled) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -84,7 +86,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 Navigator.of(context).pop();
                 // Fazer o logoff
                 await _auth.signOut();
-                Navigator.of(context).pop();  // Fecha a tela de configurações
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );// Fecha a tela de configurações
               },
               child: Text('No'),
             ),
@@ -92,6 +97,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         );
       },
     );
+  }
   }
 
   @override
@@ -165,28 +171,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-  void _showSignOutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Sign Out"),
-        content: Text("Are you sure you want to sign out?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              signOutFirebase();
-            },
-            child: Text("Sign Out"),
-          ),
-        ],
       ),
     );
   }
