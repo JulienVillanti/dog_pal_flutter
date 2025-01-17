@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:untitled4/screens/auth/login_screen.dart';
 import 'package:untitled4/screens/auth/profile_creation_screen.dart';
@@ -18,7 +18,7 @@ void main() async {
     // options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   runApp(const MainApp());
 }
@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
+    // FlutterNativeSplash.remove();
 
     return ValueListenableBuilder<ThemeMode>(
         valueListenable: themeNotifier,

@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_native_splash: ^2.4.2
+#  flutter_native_splash: ^2.4.2
   firebase_core: any
   firebase_auth: any
   firebase_database: any
@@ -37,14 +37,14 @@ flutter:
     - assets/parclafontaine.jpeg
     - assets/map.png
 
-flutter_native_splash:
-  color: "#934C4C"
-  image: assets/logo-grayscale.png
-  android: true
-  ios: true
-  web: true
-  android_12:
-    image: assets/logo-grayscale.png
-    color: "#934C4C"
-    branding_mode: bottom
+#flutter_native_splash:
+#  color: "#934C4C"
+#  image: assets/logo-grayscale.png
+#  android: true
+#  ios: true
+#  web: true
+#  android_12:
+#    image: assets/logo-grayscale.png
+#    color: "#934C4C"
+#    branding_mode: bottom
 
