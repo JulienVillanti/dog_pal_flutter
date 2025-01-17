@@ -1,45 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 // Wandrey
 // Page created to show the idea of the ratings and comments by user.
 // Need to polish and finish.
 
-class ReviewScreen extends StatelessWidget {
-  final List<ParkReviewData> parks = [
-    ParkReviewData(
-      name: "Park Lafontaine",
-      rating: 4.8,
-      imageName: "assets/images/parclafontaine.png",
-      description:
-      "One of the most popular parks in Montreal, ideal for picnics and walks.",
-      reviews: [
-        ParkReview(userName: "John", rating: 5, comment: "Incredible!"),
-        ParkReview(userName: "Alice", rating: 4, comment: "Great place to relax."),
-        ParkReview(userName: "Bob", rating: 4, comment: "Very beautiful!")
-      ],
-    ),
-    ParkReviewData(
-      name: "Park Jean-Drapeau",
-      rating: 4.7,
-      imageName: "assets/images/parcjeandrapeau.png",
-      description:
-      "A park with a view of the river and various outdoor activities.",
-      reviews: [
-        ParkReview(userName: "David", rating: 4, comment: "I love running here."),
-        ParkReview(userName: "Emily", rating: 5, comment: "A perfect place for a family day.")
-      ],
-    ),
-    ParkReviewData(
-      name: "Park Angrignon",
-      rating: 4.6,
-      imageName: "assets/images/parcangrignon.png",
-      description: "A peaceful park with large green areas and lakes.",
-      reviews: [
-        ParkReview(userName: "Eve", rating: 4, comment: "Excellent for walks."),
-        ParkReview(userName: "Jack", rating: 5, comment: "Very well maintained.")
-      ],
-    ),
+
+class ReviewScreen extends StatefulWidget {
+  @override
+  _ReviewScreenState createState() => _ReviewScreenState();
+}
+
+class _ReviewScreenState extends State<ReviewScreen> {
+  final DatabaseReference _ref = FirebaseDatabase.instance.ref();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  String _commentText = '';
+  int _rating = 0;
+  String _userName = '';
+  String _dogBreed = '';
+  int _selectedParkIndex = 0;
+  List<ParkReviewData> _parks = [];
+
+  final List<String> parkNames = [
+    "Mount Royal Park", "Jean-Drapeau Park", "La Fontaine Park", "Jarry Park",
+    "Berri Park", "Lachine Canal Park", "Parc des Rapides", "Parc Angrignon",
+    "Parc Maisonneuve", "Parc de la Visitation", "Dorchester Square",
+    "Parc du Mont-Saint-Bruno", "Biodome and Botanical Garden", "Parc de la Fontaine",
+    "Park Avenue Green Alley", "Parc Mont-Royal Summit", "Beaver Lake",
+    "Parc Jeanne-Mance", "Westmount Park", "Parc Outremont", "Parc du Bois-de-Liesse",
+    "Parc des Iles-de-Boucherville", "Parc Beaudet", "Parc Nature de l'Île-de-la-Visitation",
+    "Parc du Millénaire", "Parc des Moulins", "Parc de la Rivière-des-Prairies",
+    "Parc Léon-Provancher", "Parc de l'Anse-à-l'Orme"
   ];
+
+//---------------------------------------------
 
   @override
   Widget build(BuildContext context) {
