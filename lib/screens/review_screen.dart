@@ -82,15 +82,21 @@ class _ReviewScreenState extends State<ReviewScreen> {
       if (snapshot.exists) {
         Map<dynamic, dynamic>? parksData = snapshot.value as Map<dynamic, dynamic>?;
 
+        print("Fetched parks data: $parksData");
+
         Map<String, List<ParkReview>> parksDict = {};
         Map<String, List<int>> parkRatings = {};
 
         if (parksData != null) {
           parksData.forEach((userId, comments) {
-            if (comments is Map) {
-              comments.forEach((_, commentData) {
+            print("User ID: $userId");
+            if (comments is List) {
+              for (var commentData in comments) {
                 if (commentData is Map) {
+                  print("Comment data: $commentData");
+
                   int? parkIndex = commentData["selectedPark"] as int?;
+
                   if (parkIndex != null && parkIndex < parkNames.length) {
                     String parkName = parkNames[parkIndex];
                     String userName = commentData["userName"] as String? ?? "Anonymous";
@@ -102,13 +108,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     parkRatings.putIfAbsent(parkName, () => []).add(rating);
                   }
                 }
-              });
+              }
             }
           });
         }
 
-        //------------------------------------------
+        print("Processed parksDict: $parksDict");
 
+        // Now, process the parksDict and calculate average ratings
         List<ParkReviewData> parks = parksDict.entries.map((entry) {
           String parkName = entry.key;
           List<ParkReview> reviews = entry.value;
@@ -116,6 +123,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
           return ParkReviewData(name: parkName, rating: avgRating, reviews: reviews);
         }).toList();
+
+        print('Fetched parks: $parks');
 
         setState(() {
           _parks = parks;
@@ -128,72 +137,164 @@ class _ReviewScreenState extends State<ReviewScreen> {
     });
   }
 
-  //------------------------------------------
-
-  void _saveComment() {
+  void _saveComment() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       final userId = user.uid;
-      final commentsRef = FirebaseDatabase.instance.ref("comments/$userId").push();
+      final commentRef = _ref.child("comments/$userId/$_selectedParkIndex");
 
-      final commentData = {
-        "userName": _userName, // Certifique-se de que `_userName` foi atualizado
-        "selectedPark": _selectedParkIndex,
-        "rating": _rating,
-        "commentText": _commentText,
-      };
+      try {
+        final event = await commentRef.once();
+        final snapshot = event.snapshot;
 
-      commentsRef.set(commentData).then((_) {
-        print("Comment saved successfully!");
+        if (snapshot.exists) {
+          // Já existe um comentário para este parque
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Você já comentou sobre este parque.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else {
+          // Salvar o novo comentário
+          final commentData = {
+            "userName": _userName,
+            "selectedPark": _selectedParkIndex,
+            "rating": _rating,
+            "commentText": _commentText,
+          };
 
-        // Recarregar dados após salvar o comentário
-        _fetchParksReviews(); // Atualizar lista de comentários
-        fetchUserDetails();   // Atualizar dados do usuário, se necessário
+          await commentRef.set(commentData);
 
-        setState(() {
-          _commentText = ""; // Limpa o campo de texto
-          _rating = 0;       // Reseta a avaliação
-          _selectedParkIndex = 0; // Reseta o dropdown
-        });
-      }).catchError((error) {
-        print("Failed to save comment: $error");
-      });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Comentário salvo com sucesso!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          // Recarregar dados após salvar o comentário
+          _fetchParksReviews();
+
+          setState(() {
+            _commentText = ""; // Limpa o campo de texto
+            _rating = 0;       // Reseta a avaliação
+            _selectedParkIndex = 0; // Reseta o dropdown
+          });
+        }
+      } catch (error) {
+        print("Erro ao salvar o comentário: $error");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Falha ao salvar o comentário. Tente novamente.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } else {
-      print("No user is signed in.");
+      print("Nenhum usuário está logado.");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Você precisa estar logado para comentar.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   //------------------------------------------
 
-        @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Park Reviews')),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ColorFiltered(
-              colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
-              child: Image.asset("assets/dogpal-logo.png", height: 100,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(Colors.pink, BlendMode.srcIn),
+                child: Image.asset("assets/dogpal-logo.png", height: 100,
+                ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Park Reviews",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              SizedBox(height: 30),
+              Text('User Name: $_userName', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text('Dog Breed: $_dogBreed', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              DropdownButton<int>(
+                value: _selectedParkIndex,
+                items: List.generate(parkNames.length, (index) {
+                  return DropdownMenuItem(value: index, child: Text(parkNames[index]));
+                }),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedParkIndex = value!;
+                  });
+                },
               ),
-            ),
-            ...parks.map((park) => buildParkReview(park)).toList(),
-          ],
+              TextField(
+                controller: TextEditingController(text: _commentText),
+                maxLines: 4,
+                decoration: InputDecoration(
+                  hintText: 'Enter your comment',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  _commentText = value;
+                },
+              ),
+              Row(
+                children: List.generate(5, (index) {
+                  return IconButton(
+                    icon: Icon(index < _rating ? Icons.star : Icons.star_border),
+                    color: index < _rating ? Colors.yellow : Colors.grey,
+                    onPressed: () {
+                      setState(() {
+                        _rating = index + 1;
+                      });
+                    },
+                  );
+                }),
+              ),
+              ElevatedButton(
+                onPressed: _saveComment,
+                child: Text('Save Comment'),
+              ),
+              ..._parks.map((park) {
+                return Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(park.name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text('Rating: ${park.rating.toStringAsFixed(1)}'),
+                      ...park.reviews.map((review) {
+                        return ListTile(
+                          title: Text(review.userName),
+                          subtitle: Text(review.comment),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: List.generate(5, (index) {
+                              return Icon(Icons.star, color: index < review.rating ? Colors.yellow : Colors.grey);
+                            }),
+                          ),
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget buildParkReview(ParkReviewData park) {
+
+Widget buildParkReview(ParkReviewData park) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
@@ -263,7 +364,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
       ),
     );
   }
-}
+
 
 
 //------------------------------------------------------------
