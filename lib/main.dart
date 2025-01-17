@@ -10,8 +10,6 @@ import 'package:untitled4/screens/map_screen.dart';
 import 'package:untitled4/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'screens/user_profile_page.dart'; // Importe sua página de perfil
-import 'screens/settings_screen.dart';     // Importe sua página de configurações
-import 'screens/notificationsManager/notificationsProvider.dart';  // Importe a classe do provider
 // import 'firebase_options.dart';
 
 
@@ -20,13 +18,6 @@ void main() async {
 
   await Firebase.initializeApp(
     // options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => NotificationsProvider(),
-      child: MyApp(),
-    ),
   );
 
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -38,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: UserProfilePage(), // Página inicial
+      home: LoginScreen(), // Página inicial
     );
   }
 }

@@ -152,7 +152,7 @@ class _SignupScreenState extends State<SignupScreen> {
           _passwordController.text,
           _nameController.text,
         );
-        Navigator.of(context).pushReplacementNamed('/home');
+        Navigator.of(context).pushReplacementNamed('/login_screen.dart');
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error.toString())),
