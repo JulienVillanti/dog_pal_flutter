@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+
 // Wandrey
 // Page created to show the idea of the ratings and comments by user.
 // Need to polish and finish.

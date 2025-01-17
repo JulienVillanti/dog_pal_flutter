@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
+import 'review_screen.dart';
 
 import '../main.dart';
 
@@ -14,6 +15,7 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   final DatabaseReference ref = FirebaseDatabase.instance.ref();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String userName = "";
   String userAge = "";
@@ -91,6 +93,40 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
+  // Método para confirmar o logout
+  Future<void> _showLogoutConfirmationDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Would you like to leave a comment on a park?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navegar para a tela de revisão
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReviewScreen()),
+                );
+              },
+              child: Text('Yes'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                // Fazer o logoff
+                await _auth.signOut();
+                Navigator.of(context).pop();  // Fecha a tela de configurações
+              },
+              child: Text('No'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,9 +191,18 @@ class _SettingsViewState extends State<SettingsView> {
                 value: isDarkMode,
                 onChanged: toggleDarkMode,
               ),
-              ElevatedButton(
-                onPressed: resetPassword,
-                child: Text('Reset Password'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: resetPassword,
+                    child: Text('Reset Password'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _showLogoutConfirmationDialog,  // Chama o método para confirmar o logout
+                    child: Text('Sign Out'),
+                  ),
+                ],
               ),
             ],
           ),
