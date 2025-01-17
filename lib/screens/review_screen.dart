@@ -35,8 +35,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
     "Parc Léon-Provancher", "Parc de l'Anse-à-l'Orme"
   ];
 
-//---------------------------------------------
-
   @override
   void initState() {
     super.initState();
@@ -78,7 +76,42 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
 //---------------------------------------------
-  @override
+
+  void _fetchParksReviews() {
+    _ref.child("comments").once().then((DatabaseEvent event) {
+      final snapshot = event.snapshot;
+
+      if (snapshot.exists) {
+        Map<dynamic, dynamic>? parksData = snapshot.value as Map<dynamic, dynamic>?;
+
+        Map<String, List<ParkReview>> parksDict = {};
+        Map<String, List<int>> parkRatings = {};
+
+        if (parksData != null) {
+          parksData.forEach((userId, comments) {
+            if (comments is Map) {
+              comments.forEach((_, commentData) {
+                if (commentData is Map) {
+                  int? parkIndex = commentData["selectedPark"] as int?;
+                  if (parkIndex != null && parkIndex < parkNames.length) {
+                    String parkName = parkNames[parkIndex];
+                    String userName = commentData["userName"] as String? ?? "Anonymous";
+                    int rating = commentData["rating"] as int? ?? 0;
+                    String comment = commentData["commentText"] as String? ?? "";
+
+                    ParkReview review = ParkReview(userName: userName, rating: rating, comment: comment);
+                    parksDict.putIfAbsent(parkName, () => []).add(review);
+                    parkRatings.putIfAbsent(parkName, () => []).add(rating);
+                  }
+                }
+              });
+            }
+          });
+        }
+
+        //------------------------------------------
+
+        @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
