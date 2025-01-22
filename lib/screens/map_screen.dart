@@ -7,8 +7,6 @@ import 'package:untitled4/screens/review_screen.dart';
 import 'config.dart';
 import 'dart:convert';
 
-
-
 class MapScreen extends StatefulWidget {
   @override
   _MapScreenState createState() => _MapScreenState();
